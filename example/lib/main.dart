@@ -23,18 +23,22 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     print('initState--------->');
     initDb();
-    // MDict mdict = new MDict('data/opted003.mdx', 'utf-8', '');
+
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initDb() async {
-    // String platformVersion;
+    String platformVersion;
     String fullPathName;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
+      platformVersion = await LargeFileCopy.platformVersion;
+      print(platformVersion);
       // platformVersion = await MdictFlutter.platformVersion;
-      fullPathName = await LargeFileCopy("data/opted003.mdx").copyLargeFile;
+      fullPathName =
+          await LargeFileCopy("flutter_assets/opted003.mdx").copyLargeFile;
       print('fullPathName' + fullPathName);
+      this.readMdict(fullPathName);
     } on PlatformException {
       fullPathName = 'Failed to get platform version.';
     }
@@ -47,6 +51,10 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _fullPathName = fullPathName;
     });
+  }
+
+  void readMdict(String fullName){
+    MDict mdict = new MDict(fullName, 'utf-8', '');
   }
 
   @override

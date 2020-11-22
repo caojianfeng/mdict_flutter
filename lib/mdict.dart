@@ -28,7 +28,7 @@ class MDict {
     if (end > file.lengthSync()) {
       throw RangeError.range(end, 0, file.lengthSync());
     }
-    Completer c = Completer();
+    Completer c = Completer<List<int>> ();
     print('openRead()');
     Stream<List<int>> inputStream = file.openRead(start, end);
     List<int> result = [];

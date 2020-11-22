@@ -68,11 +68,13 @@ packages:
     source: sdk
     version: "0.0.0"
   large_file_copy:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      name: large_file_copy
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: f265554d0c83855909a2005ad8459b16e752fd60
+      url: "https://github.com/BarRemisz/large_file_copy.git"
+    source: git
     version: "0.0.1"
   matcher:
     dependency: transitive
