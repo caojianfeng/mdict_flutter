@@ -2,6 +2,15 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
 
+import 'dart:typed_data';
+
+class Header{
+  int headerBytesSize;
+  Header(int headerBytesSize){
+    this.headerBytesSize = headerBytesSize;
+  }
+}
+
 class MDict {
   String fname;
   String encoding;
@@ -13,8 +22,15 @@ class MDict {
     this.passcode = passcode;
   }
 
-  Future<List<int>> readHeaderSize() async{
-    return readRange(0,4);
+  Future<Header> readHeader() async {
+    var list = List<int>();
+    List<int> headerSizeBuffer = await readRange(0, 4);
+    var origlenBuffer = ByteData(4);
+    origlenBuffer.setInt32(0,  headerSizeBuffer[0], Endian.little);
+    Header header = new Header(origlenBuffer.buffer.asInt32List()[0]);
+    Completer c = Completer<Header>();
+    c.complete(header);
+    return c.future;
   }
 
   Future<List<int>> readRange(int start, int end) async {
@@ -30,15 +46,11 @@ class MDict {
       throw RangeError.range(end, 0, file.lengthSync());
     }
     Completer c = Completer<List<int>>();
-    print('openRead(){');
     Stream<List<int>> inputStream = file.openRead(start, end);
-    print('openRead()}');
     List<int> result = [];
     inputStream.listen((data) {
-      print('listen:$data' );
       result.addAll(data);
     }).onDone(() {
-      print('onDone:$result' );
       c.complete(result);
     }); // Decode bytes to UTF-8.
     return c.future;

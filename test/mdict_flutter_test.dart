@@ -29,9 +29,10 @@ void main() {
 
   test('MDict', () async {
     print('test MDict.construct');
-    MDict mdict = await new MDict('test/opted003.mdx', 'utf-8', '');
-    List<int> headerSize = await mdict.readHeaderSize();
-    print('headerSize:$headerSize');
+    MDict mdict = await new MDict('test/opted003.mdx', 'utf-8', ''); // AndroidStudio
+    // MDict mdict = await new MDict('opted003.mdx', 'utf-8', ''); // terminal
+    Header header = await mdict.readHeader();
+    print('header.headerBytesSize:${header.headerBytesSize}');
     // mdict.readHeader();
     // expect(await MDict, '42');
   });
