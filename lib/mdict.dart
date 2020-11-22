@@ -11,9 +11,10 @@ class MDict {
     this.fname = fname;
     this.encoding = encoding.toUpperCase();
     this.passcode = passcode;
-    this
-        .readRange(0, 4)
-        .then((headerSize) => {print("headerSize: $headerSize")});
+  }
+
+  Future<List<int>> readHeaderSize() async{
+    return readRange(0,4);
   }
 
   Future<List<int>> readRange(int start, int end) async {
@@ -28,13 +29,16 @@ class MDict {
     if (end > file.lengthSync()) {
       throw RangeError.range(end, 0, file.lengthSync());
     }
-    Completer c = Completer<List<int>> ();
-    print('openRead()');
+    Completer c = Completer<List<int>>();
+    print('openRead(){');
     Stream<List<int>> inputStream = file.openRead(start, end);
+    print('openRead()}');
     List<int> result = [];
     inputStream.listen((data) {
+      print('listen:$data' );
       result.addAll(data);
     }).onDone(() {
+      print('onDone:$result' );
       c.complete(result);
     }); // Decode bytes to UTF-8.
     return c.future;

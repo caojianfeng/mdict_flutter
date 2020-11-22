@@ -2,6 +2,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mdict_flutter/mdict_flutter.dart';
 import 'package:mdict_flutter/mdict.dart';
+import 'dart:convert';
+import 'dart:io';
 
 void main() {
   const MethodChannel channel = MethodChannel('mdict_flutter');
@@ -25,9 +27,11 @@ void main() {
     expect(await MdictFlutter.platformVersion, '42');
   });
 
-  test('MDict', () {
+  test('MDict', () async {
     print('test MDict.construct');
-    MDict mdict = new MDict('example/data/opted003.mdx', 'utf-8', '');
+    MDict mdict = await new MDict('test/opted003.mdx', 'utf-8', '');
+    List<int> headerSize = await mdict.readHeaderSize();
+    print('headerSize:$headerSize');
     // mdict.readHeader();
     // expect(await MDict, '42');
   });
